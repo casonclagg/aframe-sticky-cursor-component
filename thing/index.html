@@ -1,10 +1,8 @@
 <html>
 
 <head>
-    <title>A-Frame Sticky Cursor Component - Basic</title>
-    <!-- Aframe Extras is needed to load FBX files (the room) -->
+    <title>A-Frame Sticky Cursor Component - Model as Cursor</title>
     <script src="../build.js"></script>
-    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.2.3/dist/aframe-extras.min.js"></script> -->
 </head>
 
 <body>
@@ -25,8 +23,6 @@
         <a-cylinder cursor-listener position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
 
         <!-- Camera and Cursor Setup -->
-        <!-- scale="0.02 0.02 0.02" -->
-
         <a-entity id="cursor">
           <a-entity class="ignore-raycast" obj-model="obj: #manObj; mtl:#manMtl" scale="0.01 0.01 0.01" position="0 0 0" rotation="0 0 0"></a-entity>
         </a-entity>
