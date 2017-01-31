@@ -22,6 +22,8 @@ An A-Frame component to move cursor along object's surface.
         <a-animation begin="cursor-fusing" dur="1500" easing="ease-in" attribute="material.color" fill="forwards" from="#FFF" to="#F00"></a-animation>
         <a-animation begin="click" dur="1" easing="ease-in" attribute="material.color" fill="backwards" from="#F00" to="#FFF"></a-animation>
     </a-entity>
+    <!-- Attach Raycaster and sticky-cursor to camera (because thats where the ray gets casts from) -->
+    <!-- TODO - Allow connecting to controllers. -->
     <a-camera raycaster sticky-cursor="fuse: true; fuseTimeout: 1500; cursorId: #cursor; hoverDistance: 0;"></a-camera>
 
 ## Installation
