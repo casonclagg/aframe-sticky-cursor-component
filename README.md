@@ -57,3 +57,11 @@ Then register and use.
 require('aframe');
 require('aframe-sticky-cursor-component');
 ```
+
+### Shoutouts
+
+This component is basically a mashup of the [aframe's 0.4.0 cursor component](https://github.com/aframevr/aframe/blob/master/src/components/cursor.js) and [Jun Ito's Crawling Cursor Component](https://github.com/jujunjun110/aframe-crawling-cursor)
+
+Van gogh Room by ruslans3d is licensed under CC Attribution
+
+Vincent van Gogh too.
