@@ -2,7 +2,7 @@
 
 An A-Frame component to move cursor along object's surface.
 
-**[DEMO PAGE (link)](https://casonclagg.github.io/aframe-sticky-cursor-component/basic/)**
+**[DEMO PAGE (link)](https://casonclagg.github.io/aframe-sticky-cursor-component/)**
 
 ![DEMO](demo.gif)
 
@@ -41,7 +41,11 @@ An A-Frame component to move cursor along object's surface.
 
 <body>
   <a-scene>
-    Soon...
+    <a-entity id="cursor" scale="0.02 0.02 0.02" geometry="primitive: sphere" material="side: double; color: yellow; shader: flat">
+        <a-animation begin="cursor-fusing" dur="1500" easing="ease-in" attribute="material.color" fill="forwards" from="#FFF" to="#F00"></a-animation>
+        <a-animation begin="click" dur="1" easing="ease-in" attribute="material.color" fill="backwards" from="#F00" to="#FFF"></a-animation>
+    </a-entity>
+    <a-camera raycaster sticky-cursor="fuse: true; fuseTimeout: 1500; cursorId: #cursor; hoverDistance: 0;"></a-camera>
   </a-scene>
 </body>
 ```
