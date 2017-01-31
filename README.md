@@ -55,3 +55,7 @@ Then register and use.
 require('aframe');
 require('aframe-sticky-cursor-component');
 ```
+
+
+ffmpeg -y -ss 30 -t 3 -i sticky-cursor.mp4 -vf fps=10,scale=320:-1:flags=lanczos,palettegen palette.png
+ffmpeg -ss 30 -t 3 -i sticky-cursor.mp4 -i palette.png -filter_complex "fps=10,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse" demo.gif
