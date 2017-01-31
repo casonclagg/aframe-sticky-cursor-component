@@ -114,12 +114,13 @@ AFRAME.registerComponent('sticky-cursor', {
         var data = this.data;
 
         // Select closest object, excluding the cursor.
-        var index = evt.detail.els[0] === cursorEl
-            ? 1
-            : 0;
-        var intersection = evt.detail.intersections[index];
-        var intersectedEl = evt.detail.els[index];
-
+        // var index = evt.detail.els[0] === cursorEl
+        //     ? 1
+        //     : 0;
+        // var intersection = evt.detail.intersections[index];
+        var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
+        var intersectedEl = intersection.object.el;
+        // console.log(intersection, intersectedEl)
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
             return;
@@ -223,15 +224,15 @@ AFRAME.registerComponent('sticky-cursor', {
         });
     },
 
-    // getNearestIntersection: function (intersections, cursorElement) {
-    //     var l = intersections.length;
-    //     for (var i = 0; i < l; i++) {
-    //         // ignore cursor itself to avoid flicker && ignore "ignore-ray" class
-    //         if (cursorElement === intersections[i].object.el || intersections[i].object.el.classList.contains("ignore-ray")) {continue;}
-    //         return intersections[i];
-    //     }
-    //     return null;
-    // }
+    getNearestIntersection: function (intersections, cursorElement) {
+        var l = intersections.length;
+        for (var i = 0; i < l; i++) {
+            // ignore cursor itself to avoid flicker && ignore "ignore-raycast" class
+            if (cursorElement === intersections[i].object.el || intersections[i].object.el.classList.contains("ignore-raycast")) {continue;}
+            return intersections[i];
+        }
+        return null;
+    }
 
 });
 
