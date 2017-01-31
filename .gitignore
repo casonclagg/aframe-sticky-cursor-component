@@ -6,6 +6,8 @@ logs
 npm-debug.log*
 .DS_Store
 
+dist/
+
 # Runtime data
 pids
 *.pid
@@ -36,4 +38,3 @@ node_modules
 .node_repl_history
 
 *.sw[ponml]
-
