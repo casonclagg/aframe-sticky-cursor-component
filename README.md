@@ -69,3 +69,11 @@ This component is basically a mashup of the [aframe's 0.4.0 cursor component](ht
 Van gogh Room by ruslans3d is licensed under CC Attribution
 
 Vincent van Gogh too.
+
+## TODO
+
+#### rotation is weird on flat surface
+
+Use model cursor demo, look straight down onto the floor and walk forward, strafe and move the view around slowly.  Rotation is weird.
+
+Relevant? https://github.com/mrdoob/three.js/issues/1486

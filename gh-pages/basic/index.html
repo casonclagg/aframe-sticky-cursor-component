@@ -2,9 +2,7 @@
 
 <head>
     <title>A-Frame Sticky Cursor Component - Basic</title>
-    <!-- Aframe Extras is needed to load FBX files (the room) -->
     <script src="../build.js"></script>
-    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.2.3/dist/aframe-extras.min.js"></script> -->
 </head>
 
 <body>
@@ -23,7 +21,6 @@
         <a-cylinder cursor-listener position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
 
         <!-- Camera and Cursor Setup -->
-        <!-- scale="0.02 0.02 0.02" -->
         <a-entity id="cursor" scale="1 1 1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.05" material="side:double; color: yellow; shader: flat">
             <a-animation begin="cursor-fusing" dur="1500" easing="ease-in" attribute="material.color" fill="forwards" from="#FFF" to="#F00"></a-animation>
             <a-animation begin="click" dur="1" easing="ease-in" attribute="material.color" fill="backwards" from="#F00" to="#FFF"></a-animation>

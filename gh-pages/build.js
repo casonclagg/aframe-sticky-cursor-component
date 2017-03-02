@@ -114,13 +114,9 @@ AFRAME.registerComponent('sticky-cursor', {
         var data = this.data;
 
         // Select closest object, excluding the cursor.
-        // var index = evt.detail.els[0] === cursorEl
-        //     ? 1
-        //     : 0;
-        // var intersection = evt.detail.intersections[index];
         var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
         var intersectedEl = intersection.object.el;
-        // console.log(intersection, intersectedEl)
+        
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
             return;
