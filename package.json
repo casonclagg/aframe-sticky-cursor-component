@@ -1,6 +1,6 @@
 {
   "name": "aframe-sticky-cursor-component",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An A-Frame cursor that sticks to things and has fuse.",
   "main": "index.js",
   "scripts": {

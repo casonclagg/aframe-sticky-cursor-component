@@ -98,16 +98,19 @@ AFRAME.registerComponent('sticky-cursor', {
         // Select closest object, excluding the cursor.
         var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
         if (!intersection) {
+            cursorEl.setAttribute("visible",false)
             return;
         }
-        
+
         var intersectedEl = intersection.object.el;
 
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
+            cursorEl.setAttribute("visible",false)
             return;
         }
-
+        cursorEl.setAttribute("visible",true)
+        
         // Make it Sticky.
         var mat = intersection.object.matrixWorld;
         mat.setPosition(new THREE.Vector3(0, 0, 0));
