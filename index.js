@@ -60,6 +60,8 @@ AFRAME.registerComponent('sticky-cursor', {
         // Attach event listeners.
         canvas.addEventListener('mousedown', bind(this.onMouseDown, this));
         canvas.addEventListener('mouseup', bind(this.onMouseUp, this));
+        canvas.addEventListener('touchstart', bind(this.onMouseDown, this));
+        canvas.addEventListener('touchend', bind(this.onMouseUp, this));
         cameraEl.addEventListener('raycaster-intersection', bind(this.onIntersection, this));
         cameraEl.addEventListener('raycaster-intersection-cleared', bind(this.onIntersectionCleared, this));
     },
@@ -110,7 +112,7 @@ AFRAME.registerComponent('sticky-cursor', {
             return;
         }
         cursorEl.setAttribute("visible",true)
-        
+
         // Make it Sticky.
         var mat = intersection.object.matrixWorld;
         mat.setPosition(new THREE.Vector3(0, 0, 0));
