@@ -35,26 +35,30 @@ AFRAME.registerComponent('sticky-cursor', {
             min: 0
         },
         hoverDistance: {
-          default: 0.05
+            default: 0.05
         },
         cursorId: {
-          default: "#cursor"
+            default: "#cursor"
+        },
+        maxDistance: {
+            default: 2
         }
     },
 
     init: function() {
-        var cameraEl = this.el;
+        var cameraEl = this.el
+        this.cameraEl = cameraEl
         var cursorEl = document.querySelector(this.data.cursorId)
-        var canvas = cursorEl.sceneEl.canvas;
-        this.fuseTimeout = undefined;
-        this.mouseDownEl = null;
-        this.intersection = null;
-        this.intersectedEl = null;
+        var canvas = cursorEl.sceneEl.canvas
+        this.fuseTimeout = undefined
+        this.mouseDownEl = null
+        this.intersection = null
+        this.intersectedEl = null
 
         // Wait for canvas to load.
         if (!canvas) {
-            cursorEl.sceneEl.addEventListener('render-target-loaded', bind(this.init, this));
-            return;
+            cursorEl.sceneEl.addEventListener('render-target-loaded', bind(this.init, this))
+            return
         }
 
         // Attach event listeners.
@@ -100,7 +104,7 @@ AFRAME.registerComponent('sticky-cursor', {
         // Select closest object, excluding the cursor.
         var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
         if (!intersection) {
-            cursorEl.setAttribute("visible",false)
+            cursorEl.setAttribute("visible", false)
             return;
         }
 
@@ -108,51 +112,60 @@ AFRAME.registerComponent('sticky-cursor', {
 
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
-            cursorEl.setAttribute("visible",false)
+            cursorEl.setAttribute("visible", false)
             return;
         }
-        cursorEl.setAttribute("visible",true)
+        cursorEl.setAttribute("visible", true)
 
+        // If the intersection is past the max distance then ignore it and draw it in front of the camera
+        if (self.data.maxDistance > 0 && intersection.point.distanceTo(this.cameraEl.object3D.position) > self.data.maxDistance) {
+            var cameraNormal = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraEl.object3D.quaternion);
+            var cursorPosition = new THREE.Vector3().addVectors(this.cameraEl.object3D.position.clone(), cameraNormal.multiplyScalar(self.data.maxDistance))
+            cursorEl.setAttribute("position", cursorPosition.clone());
+            cursorEl.object3D.lookAt(this.cameraEl.object3D.position)
+        }
         // Make it Sticky.
-        var mat = intersection.object.matrixWorld;
-        mat.setPosition(new THREE.Vector3(0, 0, 0));
-        var global_normal = intersection.face.normal.clone().applyMatrix4(mat).normalize();
-        var lookAtTarget = new THREE.Vector3().addVectors(intersection.point.clone(), global_normal);
-        cursorEl.object3D.lookAt(lookAtTarget);
-        var cursorPosition = new THREE.Vector3().addVectors(intersection.point, global_normal.multiplyScalar(data.hoverDistance));
-        cursorEl.setAttribute("position", cursorPosition.clone());
+        else {
+            var mat = intersection.object.matrixWorld;
+            mat.setPosition(new THREE.Vector3(0, 0, 0));
+            var global_normal = intersection.face.normal.clone().applyMatrix4(mat).normalize();
+            var lookAtTarget = new THREE.Vector3().addVectors(intersection.point.clone(), global_normal);
+            cursorEl.object3D.lookAt(lookAtTarget);
+            var cursorPosition = new THREE.Vector3().addVectors(intersection.point, global_normal.multiplyScalar(data.hoverDistance));
+            cursorEl.setAttribute("position", cursorPosition.clone());
 
-        // Already intersecting this entity.
-        if (this.intersectedEl === intersectedEl) {
+            // Already intersecting this entity.
+            if (this.intersectedEl === intersectedEl) {
+                this.intersection = intersection;
+                return;
+            }
+
+            // Unset current intersection.
+            if (this.intersectedEl) {
+                this.clearCurrentIntersection();
+            }
+
+            // Set new intersection.
             this.intersection = intersection;
-            return;
-        }
+            this.intersectedEl = intersectedEl;
 
-        // Unset current intersection.
-        if (this.intersectedEl) {
-            this.clearCurrentIntersection();
-        }
+            // Hovering.
+            cursorEl.addState(STATES.HOVERING);
+            intersectedEl.addState(STATES.HOVERED);
+            self.twoWayEmit(EVENTS.MOUSEENTER);
 
-        // Set new intersection.
-        this.intersection = intersection;
-        this.intersectedEl = intersectedEl;
+            // Begin fuse if necessary.
+            if (data.fuseTimeout === 0 || !data.fuse) {
+                return;
+            }
+            cursorEl.addState(STATES.FUSING);
+            this.twoWayEmit(EVENTS.FUSING);
+            this.fuseTimeout = setTimeout(function fuse() {
+                cursorEl.removeState(STATES.FUSING);
+                self.twoWayEmit(EVENTS.CLICK);
+            }, data.fuseTimeout);
 
-        // Hovering.
-        cursorEl.addState(STATES.HOVERING);
-        intersectedEl.addState(STATES.HOVERED);
-        self.twoWayEmit(EVENTS.MOUSEENTER);
-
-        // Begin fuse if necessary.
-        if (data.fuseTimeout === 0 || !data.fuse) {
-            return;
-        }
-        cursorEl.addState(STATES.FUSING);
-        this.twoWayEmit(EVENTS.FUSING);
-        this.fuseTimeout = setTimeout(function fuse() {
-            cursorEl.removeState(STATES.FUSING);
-            self.twoWayEmit(EVENTS.CLICK);
-        }, data.fuseTimeout);
-
+        }        
     },
 
     /**
@@ -211,11 +224,13 @@ AFRAME.registerComponent('sticky-cursor', {
         });
     },
 
-    getNearestIntersection: function (intersections, cursorElement) {
+    getNearestIntersection: function(intersections, cursorElement) {
         var l = intersections.length;
         for (var i = 0; i < l; i++) {
             // ignore cursor itself to avoid flicker && ignore "ignore-raycast" class
-            if (cursorElement === intersections[i].object.el || intersections[i].object.el.classList.contains("ignore-raycast")) {continue;}
+            if (cursorElement === intersections[i].object.el || intersections[i].object.el.classList.contains("ignore-raycast")) {
+                continue;
+            }
             return intersections[i];
         }
         return null;
