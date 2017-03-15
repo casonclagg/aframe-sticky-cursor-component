@@ -103,22 +103,25 @@ AFRAME.registerComponent('sticky-cursor', {
 
         // Select closest object, excluding the cursor.
         var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
+        var noIntersectionFound = false
         if (!intersection) {
+            noIntersectionFound = true
             // cursorEl.setAttribute("visible", false)
-            return;
+            // return;
         }
 
         var intersectedEl = intersection.object.el;
 
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
+            noIntersectionFound = true
             // cursorEl.setAttribute("visible", false)
-            return;
+            // return;
         }
         cursorEl.setAttribute("visible", true)
 
         // If the intersection is past the max distance then ignore it and draw it in front of the camera
-        if (self.data.maxDistance > 0 && intersection.point.distanceTo(this.cameraEl.object3D.position) > self.data.maxDistance) {
+        if (noIntersectionFound || (self.data.maxDistance > 0 && intersection.point.distanceTo(this.cameraEl.object3D.position) > self.data.maxDistance)) {
             var cameraNormal = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraEl.object3D.quaternion);
             var cursorPosition = new THREE.Vector3().addVectors(this.cameraEl.object3D.position.clone(), cameraNormal.multiplyScalar(self.data.maxDistance))
             cursorEl.setAttribute("position", cursorPosition.clone());
