@@ -120,7 +120,7 @@ AFRAME.registerComponent('sticky-cursor', {
         }
         cursorEl.setAttribute("visible", true)
 
-        console.log("noIntersectionFound", noIntersectionFound)
+        // console.log("noIntersectionFound", noIntersectionFound)
         // If the intersection is past the max distance then ignore it and draw it in front of the camera
         if (self.data.maxDistance > 0 && intersection.point.distanceTo(this.cameraEl.object3D.position) > self.data.maxDistance) {
             var cameraNormal = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraEl.object3D.quaternion);
