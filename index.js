@@ -104,7 +104,7 @@ AFRAME.registerComponent('sticky-cursor', {
         // Select closest object, excluding the cursor.
         var intersection = this.getNearestIntersection(evt.detail.intersections, cursorEl)
         if (!intersection) {
-            cursorEl.setAttribute("visible", false)
+            // cursorEl.setAttribute("visible", false)
             return;
         }
 
@@ -112,7 +112,7 @@ AFRAME.registerComponent('sticky-cursor', {
 
         // If cursor is the only intersected object, ignore the event.
         if (!intersectedEl) {
-            cursorEl.setAttribute("visible", false)
+            // cursorEl.setAttribute("visible", false)
             return;
         }
         cursorEl.setAttribute("visible", true)
@@ -165,7 +165,7 @@ AFRAME.registerComponent('sticky-cursor', {
                 self.twoWayEmit(EVENTS.CLICK);
             }, data.fuseTimeout);
 
-        }        
+        }
     },
 
     /**
